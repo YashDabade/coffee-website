@@ -1,0 +1,62 @@
+
+    .Subscribe-button
+    {
+      background-color: rgb(96, 15, 15);
+      color: aliceblue;
+      border: none;
+      height: 40px;
+      width: 120px;
+      border-radius: 2px;
+      margin-right: 8px;
+    }
+    .Subscribe-button:hover
+    { 
+       opacity: 0.7;
+
+    }
+    .Subscribe-button:active
+    {
+        opacity: 0.3;
+
+    }
+
+
+ 
+
+
+
+    .Join-button
+    {
+        background-color: aliceblue;
+        border-color: aqua;
+        color: aquamarine;
+        border-style: solid;
+        height: 40px;
+      width: 120px;
+      margin-right: 8px;
+
+
+    }
+    .Join-button:hover{
+        background-color:aqua;
+          color: aliceblue;
+          opacity: 0.3;
+    }
+
+
+
+
+
+
+
+    .Tweet-button
+    {
+        background-color: blue;
+        color: azure;
+        border-radius: 20px;
+        height: 40px;
+        width:120;
+        border:none;
+
+
+    }

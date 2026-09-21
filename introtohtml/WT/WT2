@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Student Profile</h1>
+
+    
+
+    <h2>Yash Dabade</h2>
+    <p>Computer Engineering Student</p>
+
+    <div class="info">
+        <p><b>Email:</b> yashdabade2005@gmail.com</p>
+        <p><b>Mobile:</b> 9876543210</p>
+        <p><b>College:</b> RMD Sinhgad School of Engineering</p>
+    </div>
+
+    <button>Contact</button>
+
+</div>
+
+</body>
+</html>

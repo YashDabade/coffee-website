@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Placed — FoodHub</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+</head>
+<body class="page-order">
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">🍔</span>
+      <span class="logo-text">FoodHub</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Menu</a>
+      <a href="setup-guide.html" class="nav-link" style="color:var(--accent);border:1px solid var(--border-accent);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;">🗄️ Supabase Setup</a>
+      <a href="cart.html" class="nav-link cart-link">
+        <span class="cart-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="cart-badge" id="cart-badge">0</span>
+        </span>
+        Cart
+      </a>
+    </div>
+  </nav>
+
+  <main class="order-main">
+    <div class="order-success-wrap">
+      <canvas id="confetti-canvas"></canvas>
+
+      <div class="success-card">
+        <div class="success-icon-wrap">
+          <div class="success-rings">
+            <div class="ring r1"></div>
+            <div class="ring r2"></div>
+            <div class="ring r3"></div>
+          </div>
+          <div class="success-emoji">🎉</div>
+        </div>
+        <h1 class="success-title">Order Placed!</h1>
+        <p class="success-sub">Your food is being prepared by our expert chefs.</p>
+
+        <div class="delivery-tracker">
+          <div class="tracker-step active" id="step1">
+            <div class="step-icon">✅</div>
+            <div class="step-label">Order Confirmed</div>
+          </div>
+          <div class="tracker-line" id="line1"></div>
+          <div class="tracker-step" id="step2">
+            <div class="step-icon">👨‍🍳</div>
+            <div class="step-label">Preparing</div>
+          </div>
+          <div class="tracker-line" id="line2"></div>
+          <div class="tracker-step" id="step3">
+            <div class="step-icon">🛵</div>
+            <div class="step-label">On the Way</div>
+          </div>
+          <div class="tracker-line" id="line3"></div>
+          <div class="tracker-step" id="step4">
+            <div class="step-icon">🏠</div>
+            <div class="step-label">Delivered</div>
+          </div>
+        </div>
+
+        <div class="order-meta">
+          <div class="meta-row">
+            <span class="meta-label">Order ID</span>
+            <span class="meta-value" id="order-id">#FH000000</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Estimated Time</span>
+            <span class="meta-value">25 – 35 min 🚀</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Amount Paid</span>
+            <span class="meta-value" id="order-total">₹0</span>
+          </div>
+        </div>
+
+        <a href="index.html" class="btn-primary back-menu-btn" id="back-to-menu">
+          Back to Menu
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script src="supabase.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="billApp">
+
+<head>
+<title>Bill Payment Record</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+</head>
+
+<body ng-controller="billController">
+
+<h2>Bill Payment Record</h2>
+
+Name:
+<input type="text" ng-model="name"><br><br>
+
+Bill Amount:
+<input type="number" ng-model="amount"><br><br>
+
+Payment Status:
+<select ng-model="status">
+<option>Paid</option>
+<option>Pending</option>
+</select>
+
+<h3>Bill Details</h3>
+
+<p>Name: {{name}}</p>
+<p>Amount: {{amount}}</p>
+<p>Status: {{status}}</p>
+
+<script>
+
+var app = angular.module("billApp", []);
+
+app.controller("billController", function($scope) {
+$scope.name = "";
+$scope.amount = "";
+$scope.status = "Pending";
+});
+
+</script>
+
+</body>
+</html>

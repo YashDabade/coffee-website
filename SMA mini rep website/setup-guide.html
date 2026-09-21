@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supabase Setup — FoodHub</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Guide-specific styles ── */
+    .guide-main {
+      padding: 5.5rem 0 5rem;
+      min-height: 100vh;
+    }
+
+    .guide-hero {
+      text-align: center;
+      padding: 3rem 1.25rem 2.5rem;
+      position: relative;
+    }
+
+    .guide-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(34,197,94,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .guide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .guide-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 1rem;
+    }
+
+    .guide-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    /* ── Progress Track ── */
+    .progress-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .progress-step.done { color: var(--accent); }
+    .progress-step .ps-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+    }
+    .progress-step.done .ps-num {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .progress-arrow {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      padding: 0 0.25rem;
+    }
+
+    /* ── Steps Grid ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      position: relative;
+      transition: var(--transition);
+      animation: slideUpFade 0.5s var(--transition) both;
+    }
+
+    .step-card:hover {
+      border-color: rgba(34,197,94,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .step-card:nth-child(1) { animation-delay: 0.1s; }
+    .step-card:nth-child(2) { animation-delay: 0.2s; }
+    .step-card:nth-child(3) { animation-delay: 0.3s; }
+    .step-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .step-num-badge {
+      position: absolute;
+      top: -14px; left: 1.75rem;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.75rem;
+      border-radius: 100px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .step-icon-big {
+      font-size: 2.5rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .step-heading {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.6rem;
+    }
+
+    .step-desc {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.65;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── Instructions list ── */
+    .step-instructions {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .step-instructions li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .step-instructions li .li-num {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      background: var(--accent-soft);
+      border: 1px solid var(--border-accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 1px;
+    }
+
+    /* ── Code blocks ── */
+    .code-block {
+      background: #020b14;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      color: #a3c9f0;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    .code-block .kw  { color: #ff7eb6; }
+    .code-block .tbl { color: #7dd3fc; }
+    .code-block .str { color: #86efac; }
+    .code-block .cmt { color: #4a6580; font-style: italic; }
+    .code-block .num { color: #fbbf24; }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem; right: 0.5rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .copy-btn:hover { background: rgba(34,197,94,0.1); color: var(--accent); border-color: var(--border-accent); }
+    .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+
+    /* ── Link buttons ── */
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--accent-soft);
+      border: 1px solid var(--border-accent);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .link-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    /* ── Where to find keys callout ── */
+    .callout {
+      background: rgba(34,197,94,0.06);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-top: 1rem;
+    }
+    .callout-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .callout strong { color: var(--text-primary); }
+
+    /* ── Verification section ── */
+    .verify-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 3rem;
+      animation: slideUpFade 0.5s 0.5s var(--transition) both;
+    }
+
+    .verify-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .verify-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .verify-item {
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .vi-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .vi-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.2rem; }
+    .vi-text { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; }
+
+    /* ── Live test section ── */
+    .test-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 3rem;
+      animation: slideUpFade 0.5s 0.6s var(--transition) both;
+    }
+
+    .test-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .test-input {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+    .test-input:focus {
+      border-color: var(--border-accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .test-btn {
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.7rem 1.5rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .test-btn:hover { background: #4ade80; }
+    .test-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .test-result {
+      background: #020b14;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      min-height: 80px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      display: none;
+    }
+    .test-result.show { display: block; }
+    .test-result.success { color: #86efac; border-color: rgba(34,197,94,0.3); }
+    .test-result.error   { color: #fca5a5; border-color: rgba(239,68,68,0.3); }
+
+    /* ── CTA ── */
+    .guide-cta {
+      text-align: center;
+      padding: 2rem;
+      animation: slideUpFade 0.5s 0.7s var(--transition) both;
+    }
+    .cta-text { color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem; }
+
+    @media (max-width: 600px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .test-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body class="page-guide">
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">🍔</span>
+      <span class="logo-text">FoodHub</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Menu</a>
+      <a href="cart.html" class="nav-link cart-link">
+        <span class="cart-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="cart-badge" id="cart-badge">0</span>
+        </span>
+        Cart
+      </a>
+    </div>
+  </nav>
+
+  <main class="guide-main">
+    <div class="container">
+
+      <!-- Hero -->
+      <div class="guide-hero">
+        <div class="guide-badge">🗄️ Database Setup Guide</div>
+        <h1 class="guide-title">Connect FoodHub to <span class="hero-accent">Supabase</span></h1>
+        <p class="guide-subtitle">Follow these 4 steps to store real orders in your Supabase database. Takes about 5 minutes.</p>
+
+        <div class="progress-track">
+          <div class="progress-step done"><div class="ps-num">1</div> Create Project</div>
+          <div class="progress-arrow">→</div>
+          <div class="progress-step done"><div class="ps-num">2</div> Get API Keys</div>
+          <div class="progress-arrow">→</div>
+          <div class="progress-step done"><div class="ps-num">3</div> Create Table</div>
+          <div class="progress-arrow">→</div>
+          <div class="progress-step done"><div class="ps-num">4</div> Paste Keys</div>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-grid">
+
+        <!-- Step 1 -->
+        <div class="step-card">
+          <span class="step-num-badge">Step 1</span>
+          <span class="step-icon-big">🌐</span>
+          <div class="step-heading">Create a Supabase Project</div>
+          <p class="step-desc">Supabase is a free, open-source Firebase alternative. Sign up and create a new project.</p>
+          <ul class="step-instructions">
+            <li><span class="li-num">1</span> Go to <strong style="color:var(--text-primary)">supabase.com</strong> and sign in / sign up</li>
+            <li><span class="li-num">2</span> Click <strong style="color:var(--text-primary)">"New project"</strong> from your dashboard</li>
+            <li><span class="li-num">3</span> Give it a name like <strong style="color:var(--text-primary)">foodhub-db</strong></li>
+            <li><span class="li-num">4</span> Choose a strong database password and save it</li>
+            <li><span class="li-num">5</span> Select your nearest region and click <strong style="color:var(--text-primary)">Create project</strong></li>
+          </ul>
+          <a href="https://supabase.com/dashboard" target="_blank" rel="noopener" class="link-btn">
+            Open Supabase Dashboard ↗
+          </a>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <span class="step-num-badge">Step 2</span>
+          <span class="step-icon-big">🔑</span>
+          <div class="step-heading">Get Your API Keys</div>
+          <p class="step-desc">After your project is created, grab the Project URL and anon key from the Settings panel.</p>
+          <ul class="step-instructions">
+            <li><span class="li-num">1</span> Inside your project, click <strong style="color:var(--text-primary)">Settings</strong> (gear icon, left sidebar)</li>
+            <li><span class="li-num">2</span> Click <strong style="color:var(--text-primary)">API</strong> in the settings menu</li>
+            <li><span class="li-num">3</span> Copy <strong style="color:var(--text-primary)">Project URL</strong> — looks like <code style="color:var(--accent);font-size:0.75rem">https://xxxx.supabase.co</code></li>
+            <li><span class="li-num">4</span> Copy <strong style="color:var(--text-primary)">anon public</strong> key — starts with <code style="color:var(--accent);font-size:0.75rem">eyJh...</code></li>
+          </ul>
+          <div class="callout">
+            <span class="callout-icon">💡</span>
+            <span>Use the <strong>anon</strong> key (not the service_role key). The anon key is safe to use in frontend code.</span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card" style="grid-column: 1 / -1;">
+          <span class="step-num-badge">Step 3</span>
+          <span class="step-icon-big">🗃️</span>
+          <div class="step-heading">Create the Orders Table</div>
+          <p class="step-desc">Run the SQL below in Supabase → <strong style="color:var(--text-primary)">SQL Editor → New query</strong>. This creates the <code style="color:var(--accent)">orders</code> table and sets up security policies so FoodHub can write to it.</p>
+
+          <div class="code-block" id="sql-block" style="margin-bottom:1rem;">
+<button class="copy-btn" onclick="copySql(this)">Copy</button><span class="cmt">-- Run this in Supabase → SQL Editor → New Query</span>
+
+<span class="kw">CREATE TABLE IF NOT EXISTS</span> <span class="tbl">orders</span> (
+  id           uuid <span class="kw">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+  session_id   text        <span class="kw">NOT NULL</span>,
+  items        jsonb       <span class="kw">NOT NULL</span>,         <span class="cmt">-- cart items array stored as JSON</span>
+  subtotal     numeric(<span class="num">10</span>,<span class="num">2</span>),
+  delivery_fee numeric(<span class="num">10</span>,<span class="num">2</span>) <span class="kw">DEFAULT</span> <span class="num">30</span>,
+  taxes        numeric(<span class="num">10</span>,<span class="num">2</span>),
+  total_price  numeric(<span class="num">10</span>,<span class="num">2</span>),
+  status       text        <span class="kw">DEFAULT</span> <span class="str">'confirmed'</span>,
+  created_at   timestamptz <span class="kw">DEFAULT</span> now()
+);
+
+<span class="cmt">-- Enable Row Level Security</span>
+<span class="kw">ALTER TABLE</span> <span class="tbl">orders</span> <span class="kw">ENABLE ROW LEVEL SECURITY</span>;
+
+<span class="cmt">-- Allow anyone to insert new orders (visitors place orders without login)</span>
+<span class="kw">CREATE POLICY</span> <span class="str">"Anyone can insert orders"</span>
+  <span class="kw">ON</span> <span class="tbl">orders</span> <span class="kw">FOR INSERT WITH CHECK</span> (<span class="kw">true</span>);
+
+<span class="cmt">-- Allow anyone to read orders (needed for order confirmation)</span>
+<span class="kw">CREATE POLICY</span> <span class="str">"Anyone can view orders"</span>
+  <span class="kw">ON</span> <span class="tbl">orders</span> <span class="kw">FOR SELECT USING</span> (<span class="kw">true</span>);
+</div>
+
+          <div class="callout">
+            <span class="callout-icon">📌</span>
+            <span>After running: go to <strong>Table Editor</strong> in the left sidebar and you should see the <strong>orders</strong> table appear.</span>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card" style="grid-column: 1 / -1;">
+          <span class="step-num-badge">Step 4</span>
+          <span class="step-icon-big">✏️</span>
+          <div class="step-heading">Paste Your Keys into supabase.js</div>
+          <p class="step-desc">Open <strong style="color:var(--text-primary)">supabase.js</strong> in your code editor and replace the two placeholder values at the top of the file.</p>
+
+          <div class="code-block" id="keys-block" style="margin-bottom:1rem;">
+<button class="copy-btn" onclick="copyKeys(this)">Copy</button><span class="cmt">// supabase.js — lines 14–15</span>
+
+<span class="cmt">// BEFORE (placeholders)</span>
+<span class="kw">const</span> SUPABASE_URL      = <span class="str">'YOUR_SUPABASE_URL'</span>;
+<span class="kw">const</span> SUPABASE_ANON_KEY = <span class="str">'YOUR_SUPABASE_ANON_KEY'</span>;
+
+<span class="cmt">// AFTER (paste your real values)</span>
+<span class="kw">const</span> SUPABASE_URL      = <span class="str">'https://xxxxxxxxxxxx.supabase.co'</span>;
+<span class="kw">const</span> SUPABASE_ANON_KEY = <span class="str">'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'</span>;
+</div>
+
+          <div class="callout">
+            <span class="callout-icon">✅</span>
+            <span>Once saved, open your browser console after placing an order — you'll see <strong>✅ FoodHub Order saved to Supabase! ID: …</strong></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Connection Test -->
+      <div class="test-section">
+        <div class="verify-title">
+          <span>🧪</span> Live Connection Test
+        </div>
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.2rem;">
+          Paste your Supabase URL and anon key here to test the connection right in this page — no code editing needed first.
+        </p>
+        <div class="test-row">
+          <input type="text" class="test-input" id="test-url" placeholder="https://xxxx.supabase.co" />
+          <input type="text" class="test-input" id="test-key" placeholder="eyJh… (anon key)" />
+          <button class="test-btn" id="test-btn" onclick="runConnectionTest()">Test Connection</button>
+        </div>
+        <div class="test-result" id="test-result"></div>
+      </div>
+
+      <!-- What to expect -->
+      <div class="verify-section">
+        <div class="verify-title"><span>👀</span> What to Expect After Setup</div>
+        <div class="verify-grid">
+          <div class="verify-item">
+            <span class="vi-icon">🛒</span>
+            <div>
+              <div class="vi-label">Order Placed</div>
+              <div class="vi-text">Every "Place Order" in FoodHub inserts a row into your <code style="color:var(--accent)">orders</code> table instantly.</div>
+            </div>
+          </div>
+          <div class="verify-item">
+            <span class="vi-icon">📊</span>
+            <div>
+              <div class="vi-label">View Orders</div>
+              <div class="vi-text">Go to Supabase → <strong>Table Editor → orders</strong> to see all orders with timestamps, items, and totals.</div>
+            </div>
+          </div>
+          <div class="verify-item">
+            <span class="vi-icon">🔍</span>
+            <div>
+              <div class="vi-label">Console Log</div>
+              <div class="vi-text">Open DevTools → Console. After placing an order you'll see a green ✅ confirmation with the order UUID.</div>
+            </div>
+          </div>
+          <div class="verify-item">
+            <span class="vi-icon">📦</span>
+            <div>
+              <div class="vi-label">items Column</div>
+              <div class="vi-text">The <code style="color:var(--accent)">items</code> column stores the full cart as JSONB — you can query individual fields with SQL.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="guide-cta">
+        <a href="index.html" class="btn-primary" style="width:auto;display:inline-flex;padding:0.9rem 2rem;">
+          ← Back to FoodHub Menu
+        </a>
+        <p class="cta-text">The app works offline too — if Supabase isn't configured, orders are saved to localStorage.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="supabase.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // ── Copy SQL ──
+    const SQL_RAW = `-- Run this in Supabase → SQL Editor → New Query
+
+CREATE TABLE IF NOT EXISTS orders (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id   text        NOT NULL,
+  items        jsonb       NOT NULL,
+  subtotal     numeric(10,2),
+  delivery_fee numeric(10,2) DEFAULT 30,
+  taxes        numeric(10,2),
+  total_price  numeric(10,2),
+  status       text        DEFAULT 'confirmed',
+  created_at   timestamptz DEFAULT now()
+);
+
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can insert orders"
+  ON orders FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Anyone can view orders"
+  ON orders FOR SELECT USING (true);`;
+
+    function copySql(btn) {
+      navigator.clipboard.writeText(SQL_RAW).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    const KEYS_RAW = `const SUPABASE_URL      = 'https://xxxxxxxxxxxx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';`;
+
+    function copyKeys(btn) {
+      navigator.clipboard.writeText(KEYS_RAW).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    // ── Live connection test ──
+    async function runConnectionTest() {
+      const url = document.getElementById('test-url').value.trim();
+      const key = document.getElementById('test-key').value.trim();
+      const result = document.getElementById('test-result');
+      const btn = document.getElementById('test-btn');
+
+      if (!url || !key) {
+        result.textContent = '⚠️  Please enter both URL and anon key.';
+        result.className = 'test-result show error';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Testing…';
+      result.textContent = 'Connecting to Supabase…';
+      result.className = 'test-result show';
+
+      try {
+        // Load Supabase SDK if not already loaded
+        if (!window.supabase) {
+          await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+            s.onload = res; s.onerror = rej;
+            document.head.appendChild(s);
+          });
+        }
+
+        const client = window.supabase.createClient(url, key);
+
+        // Try a lightweight query — just check if the orders table exists
+        const { data, error } = await client
+          .from('orders')
+          .select('id, status, total_price, created_at')
+          .limit(3);
+
+        if (error) throw error;
+
+        const rows = data && data.length
+          ? `\nLatest orders in table:\n${JSON.stringify(data, null, 2)}`
+          : '\n(No orders yet — table is empty and ready!)';
+
+        result.textContent = `✅ Connection successful!\nConnected to: ${url}${rows}`;
+        result.className = 'test-result show success';
+      } catch (e) {
+        result.textContent = `❌ Connection failed\n\nError: ${e.message}\n\nCommon fixes:\n• Double-check the URL and key\n• Make sure you ran the SQL in Step 3\n• The key should be the "anon public" key, not service_role`;
+        result.className = 'test-result show error';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Test Connection';
+      }
+    }
+  </script>
+</body>
+</html>

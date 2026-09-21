@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/css" href="style3.css"?>
+
+<students>
+
+<student>
+<name>Rahul</name>
+<roll>101</roll>
+<branch>Computer Engineering</branch>
+<email>rahul@gmail.com</email>
+</student>
+
+<student>
+<name>Priya</name>
+<roll>102</roll>
+<branch>Information Technology</branch>
+<email>priya@gmail.com</email>
+</student>
+
+<student>
+<name>Amit</name>
+<roll>103</roll>
+<branch>Mechanical</branch>
+<email>amit@gmail.com</email>
+</student>
+
+</students>
